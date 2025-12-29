@@ -22,3 +22,11 @@ jobs:
           fqbn: arduino:avr:uno
           sketch-paths: |
             ./
+      - name: Upload Hex Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: uSDX-hex-output
+          # Capture all .hex files from the temporary build directory
+          path: |
+            **/*.hex
+            **/*.bin
