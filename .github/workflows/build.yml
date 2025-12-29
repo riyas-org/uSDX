@@ -2,11 +2,9 @@ name: Compile Arduino Sketch
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
@@ -16,26 +14,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Create directory
-        run: mkdir -p build
-      
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Platform
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr:uno
+
       - name: Compile Arduino sketches
         uses: arduino/compile-sketches@v1
         with:
           fqbn: arduino:avr:uno
           sketch-paths: |
             ./
-          #Force output to a build directory
           cli-compile-flags: |
-              - --output-dir
-              - ./build
-              - --export-binaries
+            --output-dir
+            ./build
+
       - name: Debug file locations
-        run: find . -name "*.hex" -o -name "*.bin"
+        run: |
+          echo "Listing all files in build directory:"
+          ls -R ./build
+          find . -name "*.hex"
 
       - name: Upload Hex Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: uSDX-hex-output
-          # Capture all .hex files from the temporary build directory
-          path: ./build/
+          name: uSDX-firmware
+          # Using a wildcard ensures we grab the hex regardless of subfolders
+          path: |
+            ./build/*.hex
+            ./build/*.bin
+          if-no-files-found: error
