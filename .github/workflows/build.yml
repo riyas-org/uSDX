@@ -1,3 +1,5 @@
+name: Create Build Directory
+run: mkdir -p build
 name: Compile Arduino Sketch
 
 on:
@@ -26,7 +28,7 @@ jobs:
           cli-compile-flags: |
               - --output-dir
               - ./build
-
+              - --export-binaries
       - name: Upload Hex Artifacts
         uses: actions/upload-artifact@v4
         with:
