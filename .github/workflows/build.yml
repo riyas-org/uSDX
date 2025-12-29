@@ -13,37 +13,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Install Platform
+      - name: Install AVR Platform
         run: |
           arduino-cli core update-index
-          arduino-cli core install arduino:avr:uno
+          arduino-cli core install arduino:avr
 
-      - name: Compile Arduino sketches
-        uses: arduino/compile-sketches@v1
-        with:
-          fqbn: arduino:avr:uno
-          sketch-paths: |
-            ./
-          cli-compile-flags: |
-            --output-dir
-            ./build
-
-      - name: Debug file locations
+      - name: Compile Sketch
         run: |
-          echo "Listing all files in build directory:"
-          ls -R ./build
-          find . -name "*.hex"
+          # --export-binaries puts the .hex file directly into the /build folder
+          arduino-cli compile --fqbn arduino:avr:uno --output-dir ./build --export-binaries ./
+
+      - name: Check output
+        run: ls -R ./build
 
       - name: Upload Hex Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: uSDX-firmware
-          # Using a wildcard ensures we grab the hex regardless of subfolders
           path: |
             ./build/*.hex
-            ./build/*.bin
+            ./build/*.elf
           if-no-files-found: error
