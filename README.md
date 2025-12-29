@@ -1,3 +1,7 @@
+Here is a copy of the original repository modded to work with wb2cba type simple tranceiver 
+
+
+
 # uSDXOpen
 GW8RDI's Open firmware branch for all versions of the uSDX transceiver, built on original USDX open code.
 Branched from https://github.com/threeme3/usdx  Copyright 2019, 2020, 2021   Guido PE1NNZ <pe1nnz@amsat.org>
