@@ -1,5 +1,3 @@
-name: Create Build Directory
-run: mkdir -p build
 name: Compile Arduino Sketch
 
 on:
@@ -17,7 +15,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
+      - name: Create directory
+       run: mkdir -p build
+      
       - name: Compile Arduino sketches
         uses: arduino/compile-sketches@v1
         with:
@@ -29,6 +30,9 @@ jobs:
               - --output-dir
               - ./build
               - --export-binaries
+      - name: Debug file locations
+        run: find . -name "*.hex" -o -name "*.bin"
+
       - name: Upload Hex Artifacts
         uses: actions/upload-artifact@v4
         with:
