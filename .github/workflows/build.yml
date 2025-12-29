@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Create directory
-       run: mkdir -p build
+        run: mkdir -p build
       
       - name: Compile Arduino sketches
         uses: arduino/compile-sketches@v1
